@@ -52,7 +52,7 @@ def get_single_img_patches(img_path, sing_pose_data, lmdb_env=None, patch_size=N
     return patches_np
 
 
-def gen_clip_seg_data_np(clip_dict, start_ofst=0, seg_stride=4, seg_len=12, scene_id='', clip_id='', ret_keys=False):
+def gen_clip_seg_data_np(clip_dict, start_ofst=0, seg_stride=4, seg_len=12, scene_id=-1, clip_id=-1, ret_keys=False):
     """
     Generate an array of segmented sequences, each object is a segment and a corresponding metadata array
     """
@@ -60,6 +60,8 @@ def gen_clip_seg_data_np(clip_dict, start_ofst=0, seg_stride=4, seg_len=12, scen
     pose_segs_meta = []
     person_keys = {}
     for idx in sorted(clip_dict.keys(), key=lambda x: int(x)):
+    # for p in clip_dict:
+
         sing_pose_np, sing_pose_meta, sing_pose_keys = single_pose_dict2np(clip_dict, idx)
         key = ('{:02d}_{:04d}_{:02d}'.format(int(scene_id), int(clip_id), int(idx)))
         person_keys[key] = sing_pose_keys

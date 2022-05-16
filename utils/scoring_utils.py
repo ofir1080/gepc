@@ -137,6 +137,8 @@ def get_dataset_scores(scores, metadata, max_clip=None, scene_id=None):
         max_clip = min(max_clip, len(clip_list))
         clip_list = clip_list[:max_clip]
     print("Scoring {} clips".format(len(clip_list)))
+    # ################################### ofir
+    # for clip in ['10_0038.npy']: # clip_list:
     for clip in clip_list:
         clip_res_fn = os.path.join(per_frame_scores_root, clip)
         clip_gt = np.load(clip_res_fn)
@@ -162,6 +164,9 @@ def get_dataset_scores(scores, metadata, max_clip=None, scene_id=None):
         dataset_scores_arr.append(clip_score)
         dataset_score_ids_arr.append(fig_score_id)
         dataset_metadata_arr.append([scene_id, clip_id])
+        # ###### #
+        # break  #
+        # ###### #
     return dataset_gt_arr, dataset_scores_arr, dataset_score_ids_arr, dataset_metadata_arr
 
 
@@ -179,7 +184,10 @@ def avg_scores_by_trans(scores, gt, num_transform=5, ret_first=False):
     gti = {'normal': 1, 'abnormal': 0}
     for k, gt_val in gti.items():
         score_mask[k] = scores[gt == gt_val]
-        scores_by_trans[k] = score_mask[k].reshape(-1, num_transform)
+        ###################### bugfix (ofir)
+        scores_by_trans[k] = score_mask[k].reshape(-1, num_transform, order='F')
+        # scores_by_trans[k] = score_mask[k].reshape(-1, num_transform)
+        ###################### bugfix (ofir)
         scores_tavg[k] = scores_by_trans[k].mean(axis=1)
 
     gt_trans_avg = np.concatenate([np.ones_like(scores_tavg['normal'], dtype=np.int),
