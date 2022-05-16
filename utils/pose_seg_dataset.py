@@ -123,13 +123,21 @@ def gen_dataset(person_json_root, num_clips=None, normalize_pose_segs=True,
     headless = dataset_args.get('headless', False)
     seg_conf_th = dataset_args.get('train_seg_conf_th', 0.0)
 
-    dir_list = os.listdir(person_json_root)
-    json_list = sorted([fn for fn in dir_list if fn.endswith('.json')])
-    if num_clips:
-        json_list = json_list[:num_clips]  # For debugging purposes
+    # Joni: check if person_json_root is a directory or a single file
+    if os.path.isdir(person_json_root):
+        dir_list = os.listdir(person_json_root)
+        json_list = sorted([fn for fn in dir_list if fn.endswith('.json')])
+        if num_clips:
+            json_list = json_list[:num_clips]  # For debugging purposes
+    elif os.path.isfile(person_json_root):
+        json_list = [person_json_root] # singleton list      
     for person_dict_fn in json_list:
-        scene_id, clip_id = person_dict_fn.split('_')[:2]
-        clip_json_path = os.path.join(person_json_root, person_dict_fn)
+        if os.path.isdir(person_json_root):
+            scene_id, clip_id = person_dict_fn.split('_')[:2]
+            clip_json_path = os.path.join(person_json_root, person_dict_fn)
+        elif os.path.isfile(person_json_root):
+            scene_id, clip_id = -1, -1
+            clip_json_path = person_dict_fn
         with open(clip_json_path, 'r') as f:
             clip_dict = json.load(f)
         clip_segs_data_np, clip_segs_meta, clip_keys = gen_clip_seg_data_np(clip_dict, start_ofst, seg_stride,

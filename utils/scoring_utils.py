@@ -25,7 +25,7 @@ def dpmm_calc_scores(model, train_dataset, eval_normal_dataset, eval_abn_dataset
     :return actual experiment done after feature extraction (calc_p)
     """
     # Alpha calculation and fitting
-    train_p = calc_p(model, train_dataset, args, ret_metadata=False)
+    # train_p = calc_p(model, train_dataset, args, ret_metadata=False)
     eval_p_ret = calc_p(model, eval_normal_dataset, args, ret_metadata=ret_metadata)
     if ret_metadata:
         eval_p_normal, metadata = eval_p_ret
@@ -40,6 +40,7 @@ def dpmm_calc_scores(model, train_dataset, eval_normal_dataset, eval_abn_dataset
 
     print("Started fitting DPMM")
     if pt_dpmm_path is None:
+        train_p = calc_p(model, train_dataset, args, ret_metadata=False)
         dpmm_mix = mixture.BayesianGaussianMixture(n_components=dpmm_components,
                                                    max_iter=500, verbose=1, n_init=1)
         dpmm_mix.fit(train_p[::dpmm_downsample_fac])
@@ -118,6 +119,11 @@ def score_dataset(score_vals, metadata, max_clip=None, scene_id=None):
     gt_arr, scores_arr, score_ids_arr, metadata_arr = get_dataset_scores(score_vals, metadata, max_clip, scene_id)
     gt_np = np.concatenate(gt_arr)
     scores_np = np.concatenate(scores_arr)
+    # # Joni start
+    # score_ids_np = np.concatenate(score_ids_arr)
+    # np.savez('mat.npz', gt_np=gt_np, scores_np=scores_np, score_ids_np=score_ids_np)
+    # dump(metadata_arr, 'metadata.pkl')
+    # # Joni end    
     auc, shift, sigma = score_align(scores_np, gt_np)
     return auc, shift, sigma
 
@@ -179,7 +185,7 @@ def avg_scores_by_trans(scores, gt, num_transform=5, ret_first=False):
     gti = {'normal': 1, 'abnormal': 0}
     for k, gt_val in gti.items():
         score_mask[k] = scores[gt == gt_val]
-        scores_by_trans[k] = score_mask[k].reshape(-1, num_transform)
+        scores_by_trans[k] = score_mask[k].reshape(-1, num_transform, order='F')
         scores_tavg[k] = scores_by_trans[k].mean(axis=1)
 
     gt_trans_avg = np.concatenate([np.ones_like(scores_tavg['normal'], dtype=np.int),

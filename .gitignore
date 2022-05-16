@@ -196,3 +196,12 @@ dmypy.json
 .pyre/
 
 # End of https://www.gitignore.io/api/python,pycharm
+
+.ipynb_checkpoints/
+.vscode/
+data/
+res/
+scores/
+*.pkl
+*.npz
+*.npy

@@ -133,6 +133,14 @@ def init_stc_parser(default_data_dir='data/', default_exp_dir='data/exp_dir'):
                         help='Batch size for scoring. (default: 256)')
     parser.add_argument('--dpmm_fn', type=str, metavar='DPMM_FN',
                         help="Path to a fitted DPMM model")
+
+    # Joni: for inference given a single pose json filename, not a test directory
+    parser.add_argument('--pose_fn', type=str, metavar='POSE_FN',
+                        help="Path to pose json filename")
+    # Joni: for inference we need to extract the number of frames from video.
+    #       We do not have a normal / abnormal ground truth .npy file                    
+    parser.add_argument('--vid_fn', type=str, metavar='VID_FN',
+                        help="Path to video filename")                                               
     return parser
 
 
