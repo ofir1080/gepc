@@ -2,8 +2,8 @@ import numpy as np
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
-from models.graph.graph import Graph
-from models.graph.st_graph_conv_block import ConvBlock
+from ..graph.graph import Graph
+from ..graph.st_graph_conv_block import ConvBlock
 
 
 class GCAE(nn.Module):

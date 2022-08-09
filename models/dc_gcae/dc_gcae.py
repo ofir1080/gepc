@@ -8,9 +8,9 @@ import os
 import torch
 import torch.nn as nn
 
-from models.fe.fe_model import init_fenet
-from models.fe.patchmodel import PatchModel
-from models.dc_gcae.clustering_layer import ClusteringLayer
+from ..fe.fe_model import init_fenet
+from ..fe.patchmodel import PatchModel
+from .clustering_layer import ClusteringLayer
 
 
 class DC_GCAE(nn.Module):

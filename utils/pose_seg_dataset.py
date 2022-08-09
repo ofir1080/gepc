@@ -3,9 +3,9 @@ import json
 import lmdb
 import numpy as np
 from torch.utils.data import Dataset, DataLoader
-from utils.data_utils import normalize_pose
+from gepc.utils.data_utils import normalize_pose
 
-from utils.patch_utils import get_seg_patches, gen_clip_seg_data_np, seg_patches_to_tensor, patches_from_db
+from gepc.utils.patch_utils import get_seg_patches, gen_clip_seg_data_np, seg_patches_to_tensor, patches_from_db
 
 
 class PoseSegDataset(Dataset):

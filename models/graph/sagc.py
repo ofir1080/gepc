@@ -1,7 +1,8 @@
 import torch
 import torch.nn as nn
 import numpy as np
-from models.graph.graph import Graph
+from .graph import Graph
+from ..lambdas import *
 
 
 class SAGC(nn.Module):
@@ -50,7 +51,7 @@ class SAGC(nn.Module):
             self.down = nn.Sequential(nn.Conv2d(in_channels, out_channels, 1),
                                       nn.BatchNorm2d(out_channels))
         else:
-            self.down = lambda x: x
+            self.down = identity
 
         self.bn = nn.BatchNorm2d(out_channels)
         self.soft = nn.Softmax(-2)  # Cols sum to 1.0, perhaps rows should?

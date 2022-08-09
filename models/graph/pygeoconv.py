@@ -1,6 +1,6 @@
 import torch
 import torch.nn as nn
-from models.graph.sagc import SAGC
+from .sagc import SAGC
 
 
 class PyGeoConv(nn.Module):

@@ -1,6 +1,6 @@
-from models.gcae.gcae import GCAE
-from models.fe.patchmodel import PatchModel
-from models.fe.patch_resnet import pt_resnet
+from ..gcae.gcae import GCAE
+from .patchmodel import PatchModel
+from .patch_resnet import pt_resnet
 
 
 def init_fenet(args, backbone='resnet', rm_linear=True, split_seqs=True, **kwargs):

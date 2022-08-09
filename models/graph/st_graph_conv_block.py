@@ -1,6 +1,6 @@
 import torch.nn as nn
-from models.graph.pygeoconv import PyGeoConv
-
+from .pygeoconv import PyGeoConv
+from ..lambdas import *
 
 class ConvBlock(nn.Module):
     def __init__(self, in_channels, out_channels, kernel_size,
@@ -41,10 +41,10 @@ class ConvBlock(nn.Module):
                                  nn.Dropout(dropout, inplace=True))
 
         if not residual:
-            self.residual = lambda x: 0
+            self.residual = zero
 
         elif (in_channels == out_channels) and (stride == 1):
-            self.residual = lambda x: x
+            self.residual = identity
 
         else:
             self.residual = nn.Sequential(nn.Conv2d(in_channels,
@@ -52,7 +52,7 @@ class ConvBlock(nn.Module):
                                           kernel_size=1,
                                           stride=(stride, 1)),
                                           nn.BatchNorm2d(out_channels))
-
+    
     def forward(self, x, adj):
         res = self.residual(x)
         x, adj = self.gcn(x, adj)

@@ -2,8 +2,8 @@ import os
 import torch
 import torch.nn as nn
 
-from models.gcae.gcae import GCAE
-from models.fe.patch_resnet import pt_resnet
+from ..gcae.gcae import GCAE
+from .patch_resnet import pt_resnet
 
 
 class PatchModel(nn.Module):
